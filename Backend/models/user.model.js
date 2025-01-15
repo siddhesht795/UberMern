@@ -35,7 +35,7 @@ userSchema.methods.generateAuthToken = function () {
 	return token
 }
 
-userSchema.methods.comparePassword = function (password) {
+userSchema.statics.comparePassword = function (password) {
 	return bcrypt.compare(password, this.password);
 }
 

@@ -59,6 +59,66 @@ POST /users/register
 - Password must be at least 6 characters long
 - All fields are required
 
+## User Login
+Login with existing user credentials.
+
+### Endpoint
+```
+POST /users/login
+```
+
+### Request Body
+```json
+{
+  "email": "string",    // required, valid email format
+  "password": "string"  // required, minimum 6 characters
+}
+```
+
+### Response
+
+#### Success (200 OK)
+```json
+{
+  "token": "JWT_TOKEN_STRING",
+  "user": {
+    "fullName": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "email": "string",
+    "socketId": "string",    // optional
+    "createdAt": "datetime",
+    "updatedAt": "datetime"
+  }
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Invalid credentials"
+}
+```
+
+#### Error (400 Bad Request)
+```json
+{
+  "errors": [
+    {
+      "msg": "Error message",
+      "param": "field_name",
+      "location": "body"
+    }
+  ]
+}
+```
+
+### Validation Rules
+- Email must be valid
+- Password must be at least 6 characters long
+- All fields are required
+
 ### Implementation Details
 - Password is hashed using bcrypt with salt round 10
 - Authentication uses JWT tokens

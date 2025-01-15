@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const userModel = require('../models/user.model.js')
 const userService = require('../services/user.service')
 const { validationResult } = require('express-validator')
@@ -38,13 +39,15 @@ module.exports.loginController = async (req, res, next) => {
 		return res.status(401).json({ message: "Invalid credentials" });
 	}
 
-	const isMatch = userModel.comparePassword(password);
+	const isMatch = await bcrypt.compare(password, user.password);
 
 	if (!isMatch) {
 		return res.status(401).json({ message: "Invalid credentials" });
 	}
 
 	const token = user.generateAuthToken();
+
+	console.log({ token, user })
 
 	res.status(200).json({ token, user })
 
