@@ -6,13 +6,6 @@ npm install
 npm run dev
 ```
 
-## Environment Variables
-```env
-PORT=4000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-```
-
 ## User Authentication APIs
 
 ### 1. Register User
