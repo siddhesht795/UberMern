@@ -1,14 +1,29 @@
 # Backend API Documentation
 
-## User Registration
+## Setup
+```bash
+npm install
+npm run dev
+```
+
+## Environment Variables
+```env
+PORT=4000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+```
+
+## User Authentication APIs
+
+### 1. Register User
 Register a new user in the system.
 
-### Endpoint
+#### Endpoint
 ```
 POST /users/register
 ```
 
-### Request Body
+#### Request Body
 ```json
 {
   "fullName": {
@@ -20,9 +35,8 @@ POST /users/register
 }
 ```
 
-### Response
-
-#### Success (201 Created)
+#### Response
+**Success (201 Created)**
 ```json
 {
   "token": "JWT_TOKEN_STRING",
@@ -39,35 +53,15 @@ POST /users/register
 }
 ```
 
-#### Error (400 Bad Request)
-```json
-{
-  "errors": [
-    {
-      "msg": "Error message",
-      "param": "field_name",
-      "location": "body"
-    }
-  ]
-}
-```
-
-### Validation Rules
-- Email must be valid and at least 5 characters long
-- First name must be at least 3 characters long
-- Last name must be at least 3 characters long
-- Password must be at least 6 characters long
-- All fields are required
-
-## User Login
+### 2. Login User
 Login with existing user credentials.
 
-### Endpoint
+#### Endpoint
 ```
 POST /users/login
 ```
 
-### Request Body
+#### Request Body
 ```json
 {
   "email": "string",    // required, valid email format
@@ -75,9 +69,8 @@ POST /users/login
 }
 ```
 
-### Response
-
-#### Success (200 OK)
+#### Response
+**Success (200 OK)**
 ```json
 {
   "token": "JWT_TOKEN_STRING",
@@ -94,14 +87,58 @@ POST /users/login
 }
 ```
 
-#### Error (401 Unauthorized)
+### 3. Get User Profile
+Get the profile of the authenticated user.
+
+#### Endpoint
+```
+GET /users/profile
+```
+
+#### Headers
+```
+Authorization: Bearer JWT_TOKEN_STRING
+```
+
+#### Response
+**Success (200 OK)**
 ```json
 {
-  "message": "Invalid credentials"
+  "fullName": {
+    "firstName": "string",
+    "lastName": "string"
+  },
+  "email": "string",
+  "socketId": "string",
+  "createdAt": "datetime",
+  "updatedAt": "datetime"
 }
 ```
 
-#### Error (400 Bad Request)
+### 4. Logout User
+Logout the current user and invalidate token.
+
+#### Endpoint
+```
+GET /users/logout
+```
+
+#### Headers
+```
+Authorization: Bearer JWT_TOKEN_STRING
+```
+
+#### Response
+**Success (200 OK)**
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+## Error Responses
+
+### Validation Error (400 Bad Request)
 ```json
 {
   "errors": [
@@ -114,14 +151,19 @@ POST /users/login
 }
 ```
 
-### Validation Rules
-- Email must be valid
-- Password must be at least 6 characters long
-- All fields are required
+### Authentication Error (401 Unauthorized)
+```json
+{
+  "message": "Invalid credentials"
+}
+```
 
-### Implementation Details
-- Password is hashed using bcrypt with salt round 10
-- Authentication uses JWT tokens
-- MongoDB is used as the database
-- Express-validator is used for input validation
+## Implementation Details
+- MongoDB database with Mongoose ODM
+- JWT-based authentication
+- Password encryption using bcrypt
+- Express validator for input validation
+- Cookie-based token storage
+- Token blacklisting for logout
 - Socket ID support for real-time features
+- Auto-expiring blacklisted tokens (24 hours)
