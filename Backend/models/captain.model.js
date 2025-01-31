@@ -29,7 +29,7 @@ const captainSchema = new mongoose.Schema({
         type: String
     },
     status: {
-        tpye: String,
+        type: String,
         enum: ["Active", "Inactive"],
         default: "Inactive"
     },
@@ -63,21 +63,21 @@ const captainSchema = new mongoose.Schema({
             type: Number
         }
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
-captainSchema.methods.generateAuthToken = () => {
+captainSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
     return token;
 }
 
-userSchema.statics.comparePassword = function (password) {
+captainSchema.methods.comparePassword = function (password) {
     return bcrypt.compare(password, this.password);
 }
 
-userSchema.statics.hashPassword = async function (password) {
+captainSchema.statics.hashPassword = async function (password) {
     return await bcrypt.hash(password, 10)
 }
 
-const captainModel = new mongoose.model("Captain", captainSchema)
+const captainModel = mongoose.model("Captain", captainSchema)
 
 module.exports = captainModel;
