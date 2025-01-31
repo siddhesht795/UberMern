@@ -109,7 +109,7 @@ Authorization: Bearer JWT_TOKEN_STRING
 ```
 
 ### 4. Logout User
-Logout the current user and invalidate token.
+Logout the current user and invalidate/blacklist token.
 
 #### Endpoint
 ```
