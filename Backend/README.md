@@ -1,10 +1,51 @@
-# Backend API Documentation
+# Uber Clone Backend
+
+A Node.js backend service for an Uber-like ride-sharing application using Express.js and MongoDB.
+
+## Features
+
+- User Authentication (Register/Login/Logout)
+- Captain (Driver) Registration
+- JWT-based Authentication
+- Real-time Location Tracking (Socket.IO)
+
+## Project Structure
+
+```
+Backend/
+├── controllers/
+│   ├── user.controller.js
+│   └── captain.controller.js
+├── models/
+│   ├── user.model.js
+│   ├── captain.model.js
+│   └── blacklistModel.model.js
+├── routes/
+│   ├── user.routes.js
+│   └── captain.routes.js
+├── services/
+│   ├── user.service.js
+│   └── captain.service.js
+└── middlewares/
+    └── auth.middleware.js
+```
 
 ## Setup
 ```bash
 npm install
 npm run dev
 ```
+
+## API Endpoints
+
+### User Routes
+- POST `/api/user/register` - Register new user
+- POST `/api/user/login` - User login
+- GET `/api/user/profile` - Get user profile (Protected)
+- GET `/api/user/logout` - Logout user (Protected)
+
+### Captain Routes
+- POST `/api/captain/register` - Register new captain
 
 ## User Authentication APIs
 
@@ -39,7 +80,7 @@ POST /users/register
       "lastName": "string"
     },
     "email": "string",
-    "socketId": "string",    // optional
+    "socketId": "string",
     "createdAt": "datetime",
     "updatedAt": "datetime"
   }
@@ -129,6 +170,23 @@ Authorization: Bearer JWT_TOKEN_STRING
 }
 ```
 
+## Models
+
+### User
+- Full Name (First Name, Last Name)
+- Email
+- Password
+- Socket ID
+
+### Captain
+- Full Name (First Name, Last Name)
+- Email
+- Password
+- Socket ID
+- Status (Active/Inactive)
+- Vehicle Details (Color, Plate, Capacity, Type)
+- Location (Latitude, Longitude)
+
 ## Error Responses
 
 ### Validation Error (400 Bad Request)
@@ -160,3 +218,16 @@ Authorization: Bearer JWT_TOKEN_STRING
 - Token blacklisting for logout
 - Socket ID support for real-time features
 - Auto-expiring blacklisted tokens (24 hours)
+
+## Authentication
+- JWT-based authentication
+- Token blacklisting for logout
+- Protected routes using auth middleware
+
+## Tech Stack
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- Socket.IO
+- JWT for authentication
+- bcryptjs for password hashing
