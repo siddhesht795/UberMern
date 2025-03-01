@@ -1,0 +1,23 @@
+Register Captain:
+
+{
+    "fullName": {
+        "firstName": "testCaptain_firstName",
+        "lastName": "testCaptain_lastName"
+    },
+    "email": "testCaptain@test.com",
+    "password": "testCaptainPassword",
+    "vehicle": {
+        "color":"White",
+        "plate":"MH 04 MA 0620",
+        "capacity": 6,
+        "vehicleType": "car"
+    }
+}
+
+Login Captain:
+
+{
+    "email": "testCaptain@test.com",
+    "password": "testCaptainPassword",
+}

@@ -37,25 +37,24 @@ module.exports.authUser = async (req, res, next) => {
 }
 
 module.exports.authCaptain = async (req, res, next) => {
-	const token = req.cookie.token || req.headers.authorization?.split(" ");
+	const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
 	if (!token) {
-		res.status(401).json({ message: "Unauthrized" });
+		return res.status(401).json({ message: "Unauthorized", token });
 	}
 
 	const isBlacklisted = await blacklistModel.findOne({ token: token });
 
 	if (isBlacklisted) {
-		return res.status(401).json({ message: "Unauthorized" });
+		return res.status(401).json({ message: "Unauthorized", isBlacklisted });
 	}
 
 	try {
 		const decodedId = jwt.verify(token, process.env.JWT_SECRET)._id;
 		const captain = await captainModel.findById(decodedId);
 
-		req.captain = captain; 
-
-	} catch (e) {
+		req.captain = captain;
+	} catch (err) {
 		res.status(401).json({ message: "Unauthorized" });
 	}
 }

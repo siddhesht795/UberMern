@@ -1,6 +1,7 @@
+const blacklistModel = require("../models/blacklistModel.model.js");
 const captainModel = require("../models/captain.model.js");
 const captainService = require("../services/captain.service.js");
-const { validationResult } = require("express-validator");
+const { validationResult, cookie } = require("express-validator");
 
 module.exports.registerCaptain = async (req, res, next) => {
     const errors = validationResult(req);
@@ -49,9 +50,29 @@ module.exports.loginCaptain = async (req, res, next) => {
         return res.status(401).json({ message: "Invalid E-mail or Password" });
     }
 
+    const isMatch = await bcrypt.compare(password, captain.password);
+
+    if (!isMatch) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+
     const token = captain.generateAuthToken();
 
     res.cookie('token', token);
 
     res.status(200).json({ token, captain });
+}
+
+module.exports.logOutCaptain = async (req, res, next) => {
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+
+    await blacklistModel.create({ token });
+
+    res.clearCookie('token');
+
+    res.status(200).json({ message: "Logged out successfully" });
+}
+
+module.exports.getCaptain = async (req, res, next) => {
+    res.status(200).json({ captain: req.captain });
 }
