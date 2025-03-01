@@ -22,7 +22,7 @@ router.post('/login', [
 
 router.get('/profile', authMiddleware.authCaptain, captainController.getCaptain);
 
-router.post('/login', authMiddleware.authCaptain, captainController.logOutCaptain);
+router.post('/login', authMiddleware.authCaptain, captainController.loginCaptain);
 
 router.get('/logout', authMiddleware.authCaptain, captainController.logoutCaptain)
 

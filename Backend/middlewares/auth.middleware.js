@@ -2,8 +2,7 @@ const blacklistModel = require('../models/blacklistModel.model.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const captainModel = require('../models/captain.model.js');
-const userModel = require('../models/user.model.js')
-
+const userModel = require('../models/user.model.js');
 
 module.exports.authUser = async (req, res, next) => {
 	const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
@@ -11,15 +10,15 @@ module.exports.authUser = async (req, res, next) => {
 	if (!token) {
 		return res.status(401).json({
 			message: 'token not found (Unauthorized)'
-		})
+		});
 	}
 
-	const isBlacklisted = await userModel.findOne({ token: token });
+	const isBlacklisted = await blacklistModel.findOne({ token: token });
 
 	if (isBlacklisted) {
 		return res.status(401).json({
 			message: "Unauthorized"
-		})
+		});
 	}
 
 	try {
@@ -33,9 +32,9 @@ module.exports.authUser = async (req, res, next) => {
 	} catch (error) {
 		return res.status(401).json({
 			message: 'Unauthorized'
-		})
+		});
 	}
-}
+};
 
 module.exports.authCaptain = async (req, res, next) => {
 	const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
@@ -55,7 +54,8 @@ module.exports.authCaptain = async (req, res, next) => {
 		const captain = await captainModel.findById(decodedId);
 
 		req.captain = captain;
+		return next();
 	} catch (err) {
 		res.status(401).json({ message: "Unauthorized" });
 	}
-}
+};
