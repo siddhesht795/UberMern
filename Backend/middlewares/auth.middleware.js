@@ -2,6 +2,7 @@ const blacklistModel = require('../models/blacklistModel.model.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const captainModel = require('../models/captain.model.js');
+const userModel = require('../models/user.model.js')
 
 
 module.exports.authUser = async (req, res, next) => {
@@ -53,7 +54,8 @@ module.exports.authCaptain = async (req, res, next) => {
 		const decodedId = jwt.verify(token, process.env.JWT_SECRET)._id;
 		const captain = await captainModel.findById(decodedId);
 
-		req.captain = captain; 
+		req.captain = captain;
+		next();
 
 	} catch (e) {
 		res.status(401).json({ message: "Unauthorized" });
