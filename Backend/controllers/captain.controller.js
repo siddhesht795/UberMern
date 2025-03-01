@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const blacklistModel = require("../models/blacklistModel.model.js");
+=======
+const blacklistModelModel = require("../models/blacklistModel.model.js");
+>>>>>>> 680a672aa75fb246479a14856d9ac1b06b3b184f
 const captainModel = require("../models/captain.model.js");
 const captainService = require("../services/captain.service.js");
 const { validationResult, cookie } = require("express-validator");
@@ -63,6 +67,7 @@ module.exports.loginCaptain = async (req, res, next) => {
     res.status(200).json({ token, captain });
 }
 
+<<<<<<< HEAD
 module.exports.logOutCaptain = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization.split(" ")[1];
 
@@ -75,4 +80,18 @@ module.exports.logOutCaptain = async (req, res, next) => {
 
 module.exports.getCaptain = async (req, res, next) => {
     res.status(200).json({ captain: req.captain });
+=======
+module.exports.getCaptainProfile = async (req, res, next) => {
+    res.status(200).json({captain : req.captain})
+}
+
+module.exports.getCaptainProfile = async (req, res, next) => {
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    
+    await blacklistModelModel.create({token});
+    
+    res.clearCookie('token');
+
+    res.status(200).json({message: "Logout Successful"});
+>>>>>>> 680a672aa75fb246479a14856d9ac1b06b3b184f
 }
