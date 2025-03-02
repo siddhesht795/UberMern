@@ -32,8 +32,6 @@ const UserSignUp = () => {
         setLastName('');
         setEmail('');
         setPassword('');
-
-        console.log(userData);
     }
 
     return (
@@ -96,7 +94,7 @@ const UserSignUp = () => {
                         <button
                             className='bg-black mb-4 text-white text-base font-semibold placeholder:text-sm rounded px-4 py-2 w-full'
                         >
-                            Login
+                            Sign Up
                         </button>
 
                         <p className='text-center'>Already have an account? <Link to="/login" className='mb-3 text-blue-600'>Login here</Link></p>
